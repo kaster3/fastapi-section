@@ -5,7 +5,7 @@ from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing_extensions import Protocol
 
-from app.core.db.models.spimex_trading_results import SpimexTradingResult
+from app.core.database.models.spimex_trading_results import SpimexTradingResult
 
 log = logging.getLogger(__name__)
 
