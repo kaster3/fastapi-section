@@ -2,7 +2,7 @@ How launch the project?
 
 1) up containers by this command
 
-       docker compose --env-file .env.docker up -d
+       docker compose --env-file .template.env.docker up -d
 
 2) and open this link http://0.0.0.0:8000/
 
