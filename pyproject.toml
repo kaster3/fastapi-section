@@ -26,6 +26,7 @@ aiofiles = "^24.1.0"
 bs4 = "^0.0.2"
 lxml = "^6.0.0"
 greenlet = "^3.2.3"
+xlrd = "^2.0.2"
 
 
 [tool.poetry.group.dev.dependencies]
