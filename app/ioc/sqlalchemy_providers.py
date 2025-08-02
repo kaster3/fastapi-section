@@ -4,11 +4,11 @@ import aiohttp
 from dishka import Provider, Scope, from_context, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.db.db_helper import DataBaseHelper
-from app.core.db_repository import AlchemyRepository, IDBRepository
-from app.core.excel_parser import ExcelParser
-from app.core.parser import Parser
-from app.core.service import Service
+from app.core.database.db_helper import DataBaseHelper
+from app.core.repositories.db_repository import AlchemyRepository, IDBRepository
+from app.core.services.excel_parser import ExcelParser
+from app.core.services.http_parser import Parser
+from app.core.services.service import Service
 from app.core.settings import Settings
 
 
