@@ -46,7 +46,6 @@ class Links(BaseModel):
     parse_method = "lxml"
 
 
-
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".template.env", ".env"),

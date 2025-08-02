@@ -23,9 +23,7 @@ class Parser:
         tasks = [asyncio.create_task(self.parse_page(url=url)) for url in urls]
         responses = await asyncio.gather(*tasks)
         soups = [self.get_soup(response=response) for response in responses]
-        doc_urls = list(
-            chain.from_iterable(self.get_docs_links(soup=soup) for soup in soups)
-        )
+        doc_urls = list(chain.from_iterable(self.get_docs_links(soup=soup) for soup in soups))
         tasks = [asyncio.create_task(self.download_file(url=url)) for url in doc_urls]
         await asyncio.gather(*tasks)
 

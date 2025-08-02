@@ -1,9 +1,9 @@
 import logging
 import time
 
-from app.core.repositories.db_repository import IDBRepository
 from app.core.excel_parser import ExcelParser
 from app.core.parser import Parser
+from app.core.repositories.db_repository import IDBRepository
 from app.core.settings import Settings
 
 log = logging.getLogger(__name__)

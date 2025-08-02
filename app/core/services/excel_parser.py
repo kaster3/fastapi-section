@@ -12,10 +12,7 @@ class ExcelParser:
         loop = asyncio.get_running_loop()
 
         with ProcessPoolExecutor() as pool:
-            tasks = [
-                loop.run_in_executor(pool, self.parse_excel_file, path)
-                for path in paths
-            ]
+            tasks = [loop.run_in_executor(pool, self.parse_excel_file, path) for path in paths]
             return await asyncio.gather(*tasks)
 
     def parse_excel_file(self, file_path) -> list[dict[str, str | int]]:
