@@ -40,6 +40,13 @@ class GunicornConfig(BaseModel):
     timeout: int
 
 
+class Links(BaseModel):
+    url = "https://spimex.com/markets/oil_products/trades/results/?page=page-"
+    domain = "https://spimex.com/"
+    parse_method = "lxml"
+
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".template.env", ".env"),
@@ -51,6 +58,7 @@ class Settings(BaseSettings):
     db: DataBase
     logging: LoggingConfig
     api: ApiPrefix = ApiPrefix()
+    links: Links
 
 
 settings = Settings()
