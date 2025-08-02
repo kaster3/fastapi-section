@@ -41,9 +41,9 @@ class GunicornConfig(BaseModel):
 
 
 class Links(BaseModel):
-    url = "https://spimex.com/markets/oil_products/trades/results/?page=page-"
-    domain = "https://spimex.com/"
-    parse_method = "lxml"
+    url: str = "https://spimex.com/markets/oil_products/trades/results/?page=page-"
+    domain: str = "https://spimex.com/"
+    parse_method: str = "lxml"
 
 
 class Settings(BaseSettings):
@@ -57,7 +57,7 @@ class Settings(BaseSettings):
     db: DataBase
     logging: LoggingConfig
     api: ApiPrefix = ApiPrefix()
-    links: Links
+    links: Links = Links()
 
 
 settings = Settings()
