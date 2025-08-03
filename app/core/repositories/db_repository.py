@@ -1,7 +1,8 @@
 import logging
 from abc import abstractmethod
+from datetime import date
 
-from sqlalchemy import insert
+from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing_extensions import Protocol
 
@@ -19,6 +20,11 @@ class IDBRepository(Protocol):
     async def create_docs_bulk(self, data_list: list[dict[str, str]]) -> None:
         raise NotImplementedError
 
+    @abstractmethod
+    async def get_last_trading_dates(self, limit: int) -> list[date]:
+        raise NotImplementedError
+
+
 
 class AlchemyRepository(IDBRepository):
     def __init__(self, session: AsyncSession) -> None:
@@ -33,3 +39,14 @@ class AlchemyRepository(IDBRepository):
     async def create_docs_bulk(self, data_list: list[dict[str, str | int]]) -> None:
         await self.session.execute(insert(SpimexTradingResult), data_list)
         await self.session.commit()
+
+    async def get_last_trading_dates(self, limit: int) -> list[date]:
+        query = (
+            select(SpimexTradingResult.date)
+            .distinct()  # Убираем дубликаты дат
+            .order_by(SpimexTradingResult.date.desc())  # Сортировка по убыванию
+            .limit(limit)  # Ограничение количества результатов
+        )
+
+        result = await self.session.scalars(query)
+        return list(result)
