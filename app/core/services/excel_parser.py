@@ -1,5 +1,6 @@
 import asyncio
 from concurrent.futures import ProcessPoolExecutor
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -61,7 +62,7 @@ class ExcelParser:
                 "volume": int(row.iloc[4]),
                 "total": int(row.iloc[5]),
                 "count": int(count),
-                "date": date,
+                "date": datetime.strptime(date, "%d.%m.%Y").date(),
             }
 
             all_data.append(data)
