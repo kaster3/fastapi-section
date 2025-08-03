@@ -22,7 +22,7 @@ class SpimexTradingResult(IntIdPkMixin, Base):
     total: Mapped[int] = mapped_column(nullable=False)  # Объем Договоров, руб.
     count: Mapped[int] = mapped_column(nullable=False)  # Количество Договоров, шт.
 
-    date: Mapped[str] = mapped_column(nullable=False)
+    date: Mapped[_date] = mapped_column(nullable=False)
     created_on: Mapped[_date] = mapped_column(
         insert_default=func.now(),
         nullable=False,
