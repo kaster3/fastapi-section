@@ -2,9 +2,11 @@ from typing import AsyncGenerator, AsyncIterator
 
 import aiohttp
 from dishka import Provider, Scope, from_context, provide
+from redis import asyncio as aioredis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database.db_helper import DataBaseHelper
+from app.core.repositories.cache_repository import ICacheRepository, RedisCacheRepository
 from app.core.repositories.db_repository import AlchemyRepository, IDBRepository
 from app.core.services.excel_parser import ExcelParser
 from app.core.services.http_parser import Parser
@@ -18,6 +20,7 @@ class ServiceProvider(Provider):
 
     service = provide(Service)
     db = provide(AlchemyRepository, provides=IDBRepository)
+    cache = provide(RedisCacheRepository, provides=ICacheRepository)
     parser = provide(Parser)
     excel_parser = provide(ExcelParser)
 
@@ -51,3 +54,15 @@ class SQLAlchemyProvider(Provider):
     ) -> AsyncGenerator[AsyncSession, None]:
         async with database_helper.session_factory() as session:
             yield session
+
+
+class RedisProvider(Provider):
+    scope = Scope.APP
+
+    @provide
+    async def get_redis(self, settings: Settings) -> AsyncIterator[aioredis.Redis]:
+        redis = aioredis.from_url(str(settings.redis.url))
+        try:
+            yield redis
+        finally:
+            await redis.close()

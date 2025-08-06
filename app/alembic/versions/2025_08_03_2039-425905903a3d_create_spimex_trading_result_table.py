@@ -1,16 +1,15 @@
 """create spimex_trading_result table
 
 Revision ID: 425905903a3d
-Revises: 
+Revises:
 Create Date: 2025-08-03 20:39:16.502579
 
 """
 
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "425905903a3d"
@@ -24,17 +23,11 @@ def upgrade() -> None:
     op.create_table(
         "spimex_trading_results",
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column(
-            "exchange_product_id", sa.String(length=100), nullable=False
-        ),
-        sa.Column(
-            "exchange_product_name", sa.String(length=300), nullable=False
-        ),
+        sa.Column("exchange_product_id", sa.String(length=100), nullable=False),
+        sa.Column("exchange_product_name", sa.String(length=300), nullable=False),
         sa.Column("oil_id", sa.String(length=4), nullable=False),
         sa.Column("delivery_basis_id", sa.String(length=3), nullable=False),
-        sa.Column(
-            "delivery_basis_name", sa.String(length=200), nullable=False
-        ),
+        sa.Column("delivery_basis_name", sa.String(length=200), nullable=False),
         sa.Column("delivery_type_id", sa.String(length=1), nullable=False),
         sa.Column("volume", sa.Integer(), nullable=False),
         sa.Column("total", sa.Integer(), nullable=False),

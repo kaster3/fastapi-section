@@ -1,10 +1,13 @@
 import asyncio
+import logging
 from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
 from pandas import DataFrame
+
+log = logging.getLogger(__name__)
 
 
 class ExcelParser:
@@ -71,6 +74,6 @@ class ExcelParser:
 
     @staticmethod
     def _get_all_excel_files_name() -> list[str]:
-        downloads_dir = Path(__file__).parent.parent.parent / "downloads"
+        downloads_dir = Path(__file__).parent.parent.parent.parent / "downloads"
         excel_files = list(downloads_dir.glob("*.xls"))
         return excel_files

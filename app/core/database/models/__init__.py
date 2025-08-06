@@ -1,5 +1,3 @@
-__all__ = (
-    "SpimexTradingResult",
-)
+__all__ = ("SpimexTradingResult",)
 
 from .spimex_trading_results import SpimexTradingResult

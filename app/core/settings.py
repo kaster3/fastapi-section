@@ -49,6 +49,11 @@ class Links(BaseModel):
     parse_method: str = "lxml"
 
 
+class Redis(BaseModel):
+    url: str = "redis://cache:6379/5"
+    dates_key: str = "last_dates"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(
@@ -64,6 +69,7 @@ class Settings(BaseSettings):
     logging: LoggingConfig
     api: ApiPrefix = ApiPrefix()
     links: Links = Links()
+    redis: Redis = Redis()
 
 
 settings = Settings()

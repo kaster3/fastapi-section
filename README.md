@@ -1,6 +1,6 @@
 How launch the project?
 
-1) up containers by this command
+1) up containers by this command, it's take time a little bit to parse and load trading results 
 
        docker compose --env-file .template.env.docker up -d
 
