@@ -7,6 +7,8 @@ from typing import Protocol
 
 from redis import asyncio as aioredis
 
+from app.core import Settings
+
 log = logging.getLogger(__name__)
 
 
@@ -21,7 +23,7 @@ class ICacheRepository(Protocol):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_cached_data(self, key: str) -> list[str] | None:
+    async def get_cached_data(self, key: str) -> list[str | dict] | None:
         """Получаем все кэшированные данные (или None если кэш пуст)"""
         raise NotImplementedError
 
@@ -32,8 +34,9 @@ class ICacheRepository(Protocol):
 
 
 class RedisCacheRepository(ICacheRepository):
-    def __init__(self, redis: aioredis.Redis) -> None:
+    def __init__(self, redis: aioredis.Redis, settings: Settings) -> None:
         self.redis = redis
+        self.settings = settings
 
     async def flush_all(self) -> None:
         await self.redis.flushdb()
@@ -53,7 +56,7 @@ class RedisCacheRepository(ICacheRepository):
             await asyncio.sleep(wait_seconds)
             await self.flush_all()
 
-    async def get_cached_data(self, key: str) -> list[str] | None:
+    async def get_cached_data(self, key: str) -> list[str | dict] | None:
         cached_data = await self.redis.get(key)
         if not cached_data:
             log.info("No cached data for key: %s", key)
@@ -63,6 +66,6 @@ class RedisCacheRepository(ICacheRepository):
         log.info("Retrieved cached data for key: %s", key)
         return dates
 
-    async def set_cached_data(self, data: str, key: str, ttl: int = 60) -> None:
-        await self.redis.setex(name=key, time=ttl, value=data)
-        log.info("Data cached with key: %s, TTL: %d", key, ttl)
+    async def set_cached_data(self, data: str, key: str) -> None:
+        await self.redis.setex(name=key, time=self.settings.redis.ttl, value=data)
+        log.info("Data cached with key: %s, TTL: %d", key, self.settings.redis.ttl)

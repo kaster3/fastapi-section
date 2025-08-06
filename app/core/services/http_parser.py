@@ -19,7 +19,7 @@ class Parser:
         self.settings = settings
 
     async def downland_excel_files(self) -> None:
-        urls = [f"{self.settings.links.url}{str(page)}" for page in range(1, 65)]
+        urls = [f"{self.settings.links.url}{str(page)}" for page in range(1, 70)]
         tasks = [asyncio.create_task(self.parse_page(url=url)) for url in urls]
         responses = await asyncio.gather(*tasks)
         soups = [self.get_soup(response=response) for response in responses]

@@ -1,6 +1,6 @@
-from datetime import date
+from datetime import date, datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_serializer
 
 
 class TradingResultResponse(BaseModel):
@@ -17,6 +17,13 @@ class TradingResultResponse(BaseModel):
     date: date
     created_on: date
     updated_on: date
+
+    @field_serializer("date", "created_on", "updated_on")
+    def serialize_dates(self, v: date | datetime) -> str:
+        return v.isoformat()
+
+    class Config:
+        from_attributes = True
 
 
 class LastDatesRequest(BaseModel):

@@ -51,7 +51,9 @@ class Links(BaseModel):
 
 class Redis(BaseModel):
     url: str = "redis://cache:6379/5"
+    ttl: int = 86400
     dates_key: str = "last_dates"
+    last_trading: str = "last_trading"
 
 
 class Settings(BaseSettings):

@@ -3,7 +3,7 @@ import logging
 import time
 from datetime import date
 
-from app.api.api_v1.schemas import DynamicRequest, TradingResultsRequest
+from app.api.api_v1.schemas import DynamicRequest, TradingResultsRequest, TradingResultResponse
 from app.core.repositories.cache_repository import ICacheRepository
 from app.core.repositories.db_repository import IDBRepository
 from app.core.services.excel_parser import ExcelParser
@@ -69,9 +69,25 @@ class Service:
         result = await self.db_repository.get_dynamics(request=request)
         return result
 
-    async def get_trading_results(self, request: TradingResultsRequest):
+    async def get_trading_results(self, request: TradingResultsRequest) -> list[dict]:
         """
-        список последних торгов (фильтрация по oil_id, delivery_type_id, delivery_basis_id)
+        Список последних торгов (фильтрация по oil_id, delivery_type_id, delivery_basis_id)
+        Возвращает список словарей с данными торгов
         """
-        result = await self.db_repository.get_trading_results(request=request)
-        return result
+        if cached := await self.cache_repository.get_cached_data(key=self.settings.redis.last_trading):
+            log.debug(f"Returning cached trading results {cached}")
+            return cached
+
+        results = await self.db_repository.get_trading_results(request=request)
+
+        serialized_results = [
+            TradingResultResponse.model_validate(result, from_attributes=True).model_dump()
+            for result in results
+        ]
+        serialized = json.dumps(serialized_results)
+        await self.cache_repository.set_cached_data(
+            data=serialized,
+            key=self.settings.redis.last_trading,
+        )
+        
+        return serialized_results
